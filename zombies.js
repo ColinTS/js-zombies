@@ -122,7 +122,6 @@ class Player {
     }
 
     equip(itemToEquip){
-      console.log(itemToEquip instanceof Weapon);
       if(this.equipped !== false){
         this._pack[this._pack.indexOf(itemToEquip)] = this.equipped;
         this.equipped = itemToEquip;
@@ -134,7 +133,71 @@ class Player {
       }
     }
 
- }
+    eat(itemToEat){
+      if(this._pack.indexOf(itemToEat) === -1 || itemToEat instanceof Food === false){
+        return false;
+      }else if(this.getMaxHealth() - this.health <= itemToEat.energy){
+        this.health = this.getMaxHealth();
+      }else{
+        this.health += itemToEat.energy;
+      }
+      this.discardItem(itemToEat);
+    }
+
+    useItem(item){
+      if(item instanceof Weapon === true){
+        this.equip(item);
+      }
+      if(item instanceof Food === true){
+        this.eat(item);
+      }
+    }
+
+    equippedWith(){
+      if(this.equipped !== false){
+        console.log(this.name + " has equipped: " + this.equipped.name);
+        return this.equipped.name;
+      }else{
+        console.log("Nothing is equipped.");
+        return false;
+      }
+    }
+}
+
+class Zombie{
+  constructor(health, strength, speed){
+    this._maxHealth = health;
+    this.health = health;
+    this.strength = strength;
+    this.speed = speed;
+    this.isAlive = true;
+  }
+}
+
+class FastZombie extends Zombie{
+  constructor(health, strength, speed){
+    super(health, strength, speed);
+  }
+}
+
+class StrongZombie extends Zombie{
+  constructor(health, strength, speed){
+    super(health, strength, speed);
+  }
+}
+
+class RangedZombie extends Zombie{
+  constructor(health, strength, speed){
+    super(health, strength, speed);
+  }
+}
+
+class ExplodingZombie extends Zombie{
+  constructor(health, strength, speed){
+    super(health, strength, speed);
+  }
+}
+
 /**
  * Class => Player(name, health, strength, speed)
  * -----------------------------
