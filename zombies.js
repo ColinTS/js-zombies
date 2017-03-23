@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Class => Item(name)
  * -----------------------------
@@ -7,7 +8,11 @@
  * @param {string} name     The item's name.
  * @property {string} name
  */
-
+ class Item {
+  constructor(name) {
+    this.name = name;
+  }
+}
 
 /**
  * Class => Weapon(name, damage)
@@ -24,12 +29,16 @@
  * @param {number} damage   The weapon's damage.
  * @property {number} damage
  */
-
-
 /**
  * Weapon Extends Item Class
  * -----------------------------
  */
+ class Weapon extends Item {
+  constructor(name, damage){
+    super(name);
+    this.damage = damage;
+  }
+ }
 
 
 
@@ -48,15 +57,84 @@
  * @param {number} energy     The energy the food provides.
  * @property {number} energy
  */
-
-
 /**
  * Food Extends Item Class
  * -----------------------------
  */
+ class Food extends Item {
+  constructor(name, energy){
+    super(name);
+    this.energy = energy;
+  }
+ }
 
 
+class Player {
+  constructor(name, health, strength, speed){
+    this._pack = [];
+    this._maxHealth = health;
+    this.name = name;
+    this.health = health;
+    this.strength = strength;
+    this.speed = speed;
+    this.isAlive = true;
+    this.equipped = false;
+  }
 
+    getPack(){
+      return this._pack;
+    }
+
+    getMaxHealth(){
+      return this._maxHealth;
+    }
+
+    checkPack(){
+      console.log(this._pack);
+    }
+
+    takeItem(item){
+      if(this._pack.length < 3){
+        this._pack.push(item);
+        console.log(this.name + "has " + this._pack.length + " items in their pack.")
+        return true;
+      } else{
+        console.log("The pack is full");
+        return false;
+      }
+    }
+
+    discardItem(item){
+      if(this._pack.indexOf(item) === -1){
+        console.log("You do not have this item in your pack");
+        return false;
+      } else{
+        var removed = this._pack.splice(this._pack.indexOf(item), 1);
+        console.log(this.name
+          + " now has "
+          + this._pack.length
+          + "items in their pack. "
+          + removed
+          + " was removed from the pack.");
+
+          return true;
+      }
+    }
+
+    equip(itemToEquip){
+      console.log(itemToEquip instanceof Weapon);
+      if(this.equipped !== false){
+        this._pack[this._pack.indexOf(itemToEquip)] = this.equipped;
+        this.equipped = itemToEquip;
+      }else if(this._pack.indexOf(itemToEquip) === -1 || itemToEquip instanceof Weapon === false){
+        return false;
+      }else {
+        this.equipped = itemToEquip;
+        this.discardItem(itemToEquip);
+      }
+    }
+
+ }
 /**
  * Class => Player(name, health, strength, speed)
  * -----------------------------
